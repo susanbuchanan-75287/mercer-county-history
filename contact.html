@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Contact &amp; Hours — Mercer County Historical Society</title>
+<meta name="description" content="Contact the Mercer County Historical Society in Princeton, WV. Phone (304) 425-9017, email info@mercercountyhistoricalsociety.net, 908 Harrison St. Museum hours and directions." />
+<meta name="theme-color" content="#0c2a4d" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="MCHS History" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="icon" href="icons/favicon-32.png" />
+<script>
+  (() => { const p=new URLSearchParams(location.search).get("scoutTheme"); const s=localStorage.getItem("mc-theme");
+  document.documentElement.setAttribute("data-theme", s||p||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")); })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>#contact-map{height:340px;border-radius:16px;border:1px solid var(--mc-line);box-shadow:var(--mc-shadow-sm);z-index:1}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><div class="seal">MC</div><div class="brand-txt"><small>Est. 1957 · Princeton, WV</small><strong>Historical Society</strong></div></a>
+    <nav class="main"><ul id="primary-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="museums.html">Museums &amp; Sites</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="programs.html">Events &amp; Programs</a></li>
+      <li><a href="support.html">Support</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://susanbuchanan-75287.github.io/visit-mercer-county-wv/walking-tour.html" target="_blank" rel="noopener">Heritage Trail ↗</a></li>
+      <li><button class="theme-toggle" onclick="mcToggleTheme()" aria-label="Toggle dark mode">◐</button></li>
+    </ul></nav>
+    <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">☰</button>
+  </div>
+</header>
+
+<section id="main" class="hero short">
+  <div class="hero-grad"></div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow" style="color:var(--mc-gold)">We'd love to hear from you</p>
+    <h1>Contact &amp; <em>hours.</em></h1>
+    <p class="lede">Questions about a visit, a research appointment, a donation or membership? Reach out — the MCHS is an all-volunteer society, so please allow a little time for a reply.</p>
+  </div>
+  <svg class="ridge" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,180 L200,120 L400,170 L620,110 L820,165 L1040,105 L1240,160 L1440,120 L1440,220 L0,220 Z" fill="var(--mc-navy-deep)" opacity="0.6"/>
+    <path d="M0,200 L240,160 L480,195 L720,150 L980,195 L1220,155 L1440,190 L1440,220 L0,220 Z" fill="var(--mc-paper)"/>
+  </svg>
+</section>
+
+<section id="main" class="section">
+  <div class="wrap">
+    <div class="grid g2">
+      <div>
+        <div class="card">
+          <h3>Get in touch</h3>
+          <ul class="mc-list">
+            <li><b>Phone:</b> <a href="tel:+13044259017" style="color:var(--mc-teal);font-weight:700">(304) 425-9017</a></li>
+            <li><b>General email:</b> <a href="mailto:info@mercercountyhistoricalsociety.net" style="color:var(--mc-teal);font-weight:700">info@mercercountyhistoricalsociety.net</a></li>
+            <li><b>Research email:</b> <a href="mailto:research@mchsprincetonwv.org" style="color:var(--mc-teal);font-weight:700">research@mchsprincetonwv.org</a></li>
+            <li><b>Address:</b> 908 Harrison St, Princeton, WV 24740</li>
+            <li><b>Facebook:</b> <a href="https://www.facebook.com/MercerCountyHistoricalSociety/" target="_blank" rel="noopener" style="color:var(--mc-teal);font-weight:700">@MercerCountyHistoricalSociety ↗</a></li>
+          </ul>
+          <a class="btn btn-gold" href="mailto:info@mercercountyhistoricalsociety.net" style="margin-top:8px">Email the Society →</a>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h3>Hours</h3>
+          <ul class="mc-list">
+            <li><b>Office &amp; Research Center:</b> by appointment only</li>
+            <li><b>War Museum:</b> Tue–Sat, 10:00 AM–4:00 PM</li>
+            <li><b>Agricultural Museum:</b> Thu–Sat, 1:00 PM–5:00 PM (seasonal, May–October)</li>
+            <li><b>Railroad Depot &amp; Todd Flat Schoolhouse:</b> seasonal / special events — see <a href="programs.html" style="color:var(--mc-teal);font-weight:700">Events</a></li>
+          </ul>
+          <p style="font-size:.82rem;color:var(--mc-muted);margin:6px 0 0">Museum hours vary by location and season — please confirm before you travel.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px">
+      <div id="contact-map" role="application" aria-label="Map showing the Mercer County Historical Society in Princeton, WV"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand"><a class="brand" href="index.html"><div class="seal">MC</div><div class="brand-txt"><small>Est. 1957</small><strong style="color:#fff">Historical Society</strong></div></a>
+        <p>Preserving the stories, artifacts and historic sites of Mercer County, West Virginia.</p></div>
+      <div><h5>Visit</h5><ul><li><a href="museums.html">Museums &amp; Sites</a></li><li><a href="programs.html">Events &amp; Programs</a></li><li><a href="research.html">Research</a></li><li><a href="contact.html">Contact &amp; Hours</a></li></ul></div>
+      <div><h5>Get involved</h5><ul><li><a href="support.html">Become a Member</a></li><li><a href="support.html">Make a Donation</a></li><li><a href="support.html">Donate Artifacts</a></li><li><a href="support.html">Volunteer</a></li></ul></div>
+      <div><h5>Region</h5><ul><li><a href="https://susanbuchanan-75287.github.io/visit-mercer-county-wv/" target="_blank" rel="noopener">Visit Mercer County ↗</a></li><li><a href="https://mercercountywv.com/" target="_blank" rel="noopener">County Commission ↗</a></li></ul></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Mercer County Historical Society · 908 Harrison St, Princeton, WV 24740</span><span>(304) 425-9017</span></div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/site.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  var el = document.getElementById("contact-map");
+  if(!el || typeof L === "undefined") return;
+  var c = [37.3687, -81.0957];
+  var map = L.map(el, { scrollWheelZoom:false }).setView(c, 15);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom:19, attribution:"&copy; OpenStreetMap contributors" }).addTo(map);
+  map.on("click", function(){ map.scrollWheelZoom.enable(); });
+  L.marker(c).addTo(map).bindPopup("<b>Mercer County Historical Society</b><br>908 Harrison St, Princeton, WV").openPopup();
+  setTimeout(function(){ map.invalidateSize(); }, 80);
+});
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
+</body>
+</html>
