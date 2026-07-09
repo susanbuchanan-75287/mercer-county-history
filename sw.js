@@ -1,7 +1,7 @@
 /* Mercer County Historical Society — service worker (offline-friendly, cache-first for the app shell) */
-const CACHE = "mchs-v1";
+const CACHE = "mchs-v2";
 const SHELL = [
-  ".", "index.html", "museums.html", "research.html", "programs.html", "support.html", "contact.html",
+  ".", "index.html", "museums.html", "research.html", "programs.html", "support.html", "contact.html", "volunteer.html",
   "css/styles.css", "js/site.js",
   "img/mc/railroad.jpg", "img/mc/bramwell.jpg", "img/mc/summer.webp", "img/mc/fall.webp", "img/mc/aerial.jpg",
   "manifest.json", "icons/icon-192.png", "icons/apple-touch-icon.png", "icons/favicon-32.png"
@@ -23,6 +23,7 @@ self.addEventListener("fetch", e => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
+  if (url.pathname.startsWith("/api") || url.pathname.startsWith("/.auth")) return;
   e.respondWith(
     caches.match(req).then(hit => hit || fetch(req).then(res => {
       const copy = res.clone();

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Staff Admin — Mercer County Historical Society</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#0c2a4d" />
+<script>
+  (() => { const p=new URLSearchParams(location.search).get("scoutTheme"); const s=localStorage.getItem("mc-theme");
+    document.documentElement.setAttribute("data-theme", s||p||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")); })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .admin-wrap{max-width:1000px;margin:0 auto;padding:30px 20px 90px}
+  .admin-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:24px}
+  .admin-bar .who{margin-left:auto;color:var(--mc-muted);font-size:.9rem}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form-grid .full{grid-column:1 / -1}
+  label{display:block;font-size:.8rem;font-weight:700;color:var(--mc-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+  .ck{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0}
+  .ck input{width:auto}
+  input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--mc-line);border-radius:var(--mc-radius-sm);
+    background:var(--mc-cream);color:var(--mc-ink);font:inherit}
+  textarea{min-height:70px;resize:vertical}
+  .ev-row{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;
+    padding:14px 0;border-top:1px solid var(--mc-line)}
+  .ev-row .chip{text-align:center;background:var(--mc-navy);color:#fff;border-radius:12px;padding:6px 4px}
+  .ev-row .chip b{display:block;font-family:"Fraunces";color:var(--mc-gold);font-size:.9rem;line-height:1.1}
+  .ev-row .chip span{font-size:.7rem}
+  .ev-row .thumb{width:64px;height:48px;object-fit:cover;border-radius:8px;border:1px solid var(--mc-line)}
+  .ev-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .btn-sm{padding:6px 12px;font-size:.82rem;border-radius:var(--mc-radius-sm);cursor:pointer;border:1px solid var(--mc-line);background:var(--mc-cream);color:var(--mc-ink);font-weight:700}
+  .btn-danger{border-color:#c0392b;color:#c0392b}
+  .msg{padding:12px 16px;border-radius:var(--mc-radius-sm);margin:14px 0;font-weight:600;display:none}
+  .msg.ok{background:color-mix(in srgb,var(--mc-teal) 15%,transparent);color:var(--mc-teal);display:block}
+  .msg.err{background:#fdecea;color:#c0392b;display:block}
+  .gate{max-width:540px;margin:70px auto;text-align:center}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;background:var(--mc-paper-2);border:1px solid var(--mc-line);border-radius:16px;padding:6px;margin-bottom:22px}
+  .tabs button{border:0;background:transparent;padding:9px 16px;border-radius:11px;font-weight:700;cursor:pointer;color:var(--mc-muted);font:inherit}
+  .tabs button.active{background:var(--mc-navy);color:#fff}
+  [data-panel]{display:none}
+  [data-panel].active{display:block}
+  .badge{display:inline-block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--mc-teal) 15%,transparent);color:var(--mc-teal)}
+  .badge.pending{background:#fdf0d5;color:#8a6a10}
+  .badge.screening{background:#e5eefc;color:#2b5cb8}
+  .badge.approved{background:color-mix(in srgb,var(--mc-teal) 18%,transparent);color:var(--mc-teal)}
+  .badge.rejected{background:#fdecea;color:#c0392b}
+  .rec-meta{color:var(--mc-muted);font-size:.85rem}
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr}.ev-row{grid-template-columns:1fr;text-align:left}.ev-actions{justify-content:flex-start}}
+</style>
+</head>
+<body>
+<div class="admin-wrap">
+  <!-- Gate -->
+  <div id="gate" class="gate">
+    <div class="seal" style="width:56px;height:56px;margin:0 auto 16px">MC</div>
+    <h2 style="font-family:Fraunces">Staff Admin</h2>
+    <p id="gateMsg" style="color:var(--mc-muted);margin:12px 0 22px">Checking your access…</p>
+    <div id="gateActions" style="display:none">
+      <a class="btn btn-gold" href="/.auth/login/github?post_login_redirect_uri=/admin.html">Sign in with GitHub</a>
+      <a class="btn btn-ghost" href="/.auth/login/aad?post_login_redirect_uri=/admin.html" style="margin-left:8px">Sign in with Microsoft email</a>
+      <p style="margin-top:16px;font-size:.86rem">
+        <a href="https://passwordreset.microsoftonline.com/" target="_blank" rel="noopener" style="color:var(--mc-teal);font-weight:700">Forgot your Microsoft password? Reset it by email ↗</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Console -->
+  <div id="console" style="display:none">
+    <div class="admin-bar">
+      <a class="brand" href="index.html"><div class="seal">MC</div><div class="brand-txt"><small>Princeton, WV</small><strong>Staff Admin</strong></div></a>
+      <span class="who" id="who"></span>
+      <a class="btn-sm" href="index.html">View site ↗</a>
+      <a class="btn-sm" href="/.auth/logout?post_logout_redirect_uri=/">Sign out</a>
+    </div>
+
+    <div class="tabs" id="adminTabs"></div>
+    <div id="msg" class="msg"></div>
+    <div id="panels"></div>
+  </div>
+</div>
+
+<script>
+/* ---------------------------------------------------------------------------
+   Config-driven staff admin console. Each resource declares its API endpoint,
+   the response array key, its form fields and how rows display. Two kinds:
+     kind "manage"  – staff create/edit/delete (events, photos, videos, ...)
+     kind "records" – submissions from the public (volunteers, sign-ups); staff
+                      review status / add screening notes / delete only.
+--------------------------------------------------------------------------- */
+const RESOURCES = [
+  { id:"events", label:"Events", endpoint:"/api/events", key:"events", kind:"manage", idFrom:"title",
+    fields:[
+      {name:"title", label:"Title", type:"text", required:true, max:140, full:true},
+      {name:"desc", label:"Description", type:"textarea", max:400, full:true},
+      {name:"cat", label:"Category", type:"select", options:["lecture","workshop","tour","celebration","family"]},
+      {name:"dateBig", label:"Date chip — top", type:"text", max:8, placeholder:"Jun 20"},
+      {name:"dateSmall", label:"Date chip — bottom", type:"text", max:12, placeholder:"annual"},
+      {name:"location", label:"Location", type:"text", max:140, placeholder:"908 Harrison St"},
+      {name:"link", label:"Link (optional)", type:"text", max:300, placeholder:"programs.html or https://…"},
+      {name:"order", label:"Sort order", type:"number", def:500}
+    ],
+    chip:r=>({b:r.dateBig||"—", s:r.dateSmall||""}), title:r=>r.title, sub:r=>[r.desc,r.location].filter(Boolean).join(" · ") },
+
+  { id:"photos", label:"Photos", endpoint:"/api/photos", key:"photos", kind:"manage", idFrom:"title",
+    fields:[
+      {name:"title", label:"Title", type:"text", required:true, max:120, full:true},
+      {name:"url", label:"Image URL or filename", type:"text", required:true, max:400, full:true, placeholder:"img/caboose.jpg or https://…"},
+      {name:"alt", label:"Alt text (accessibility)", type:"text", max:200, full:true},
+      {name:"page", label:"Show on page", type:"select", options:["home","museums","programs","research","contact"]},
+      {name:"caption", label:"Caption", type:"text", max:240, full:true},
+      {name:"order", label:"Sort order", type:"number", def:500}
+    ],
+    img:r=>r.url, title:r=>r.title, sub:r=>(r.page?("· "+r.page):"")+" "+(r.caption||"") },
+
+  { id:"videos", label:"Videos", endpoint:"/api/videos", key:"videos", kind:"manage", idFrom:"title",
+    fields:[
+      {name:"title", label:"Title", type:"text", required:true, max:140, full:true},
+      {name:"youtube", label:"YouTube ID or URL", type:"text", required:true, max:200, full:true, placeholder:"dQw4w9WgXcQ or https://youtu.be/…"},
+      {name:"category", label:"Category", type:"text", max:40, placeholder:"museum, history, community…"},
+      {name:"note", label:"Caption / note", type:"text", max:240, full:true},
+      {name:"order", label:"Sort order", type:"number", def:500}
+    ],
+    ytimg:r=>ytid(r.youtube), title:r=>r.title, sub:r=>(r.category?("· "+r.category):"")+" "+(r.note||"") },
+
+  { id:"buttons", label:"Buttons", endpoint:"/api/buttons", key:"buttons", kind:"manage", idFrom:"label",
+    fields:[
+      {name:"label", label:"Button text", type:"text", required:true, max:60, full:true},
+      {name:"url", label:"Link URL", type:"text", required:true, max:400, full:true, placeholder:"support.html or https://…"},
+      {name:"location", label:"Where it shows", type:"select", options:["home-hero","support","museums","footer"]},
+      {name:"style", label:"Style", type:"select", options:["gold","ghost","teal"]},
+      {name:"newTab", label:"Open in new tab", type:"checkbox"},
+      {name:"order", label:"Sort order", type:"number", def:500}
+    ],
+    title:r=>r.label, sub:r=>"→ "+r.url+" · "+r.location+" · "+r.style },
+
+  { id:"shifts", label:"Open-Hours Shifts", endpoint:"/api/shifts", key:"shifts", kind:"manage", idFrom:"role",
+    fields:[
+      {name:"role", label:"Role", type:"text", required:true, max:120, full:true, placeholder:"Front desk / greeter"},
+      {name:"date", label:"Date / recurrence", type:"text", required:true, max:40, placeholder:"Every Saturday"},
+      {name:"time", label:"Time", type:"text", max:60, placeholder:"10:00 AM – 1:00 PM"},
+      {name:"needed", label:"Volunteers needed", type:"number", def:2},
+      {name:"note", label:"Note", type:"text", max:240, full:true},
+      {name:"order", label:"Sort order", type:"number", def:500}
+    ],
+    chip:r=>({b:String(r.needed||0), s:"needed"}), title:r=>r.role, sub:r=>(r.date||"")+" · "+(r.time||"")+" — "+(r.note||"") },
+
+  { id:"volunteers", label:"Volunteer Screening", endpoint:"/api/volunteers", key:"volunteers", kind:"records", idFrom:"name",
+    statusField:"status", statuses:["pending","screening","approved","rejected"],
+    title:r=>r.name, sub:r=>[r.email,r.phone,r.interest].filter(Boolean).join(" · "),
+    detail:r=>[r.availability?("Availability: "+r.availability):"", r.message?("“"+r.message+"”"):"", "Applied "+fmtDate(r.createdAt)].filter(Boolean).join("<br>") },
+
+  { id:"signups", label:"Shift Sign-ups", endpoint:"/api/signups", key:"signups", kind:"records", idFrom:"name",
+    title:r=>r.name, sub:r=>[r.email,r.phone,r.shiftLabel].filter(Boolean).join(" · "),
+    detail:r=>"Signed up "+fmtDate(r.createdAt) }
+];
+
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
+const $ = id => document.getElementById(id);
+const DATA = {};
+
+function ytid(v){ v=String(v||"").trim(); const m=v.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/); if(m) return m[1]; if(/^[\w-]{11}$/.test(v)) return v; return ""; }
+function fmtDate(s){ if(!s) return ""; const d=new Date(s); return isNaN(d)?s:d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}); }
+function showMsg(text, ok){ const m=$("msg"); m.textContent=text; m.className="msg "+(ok?"ok":"err"); if(ok) setTimeout(()=>{m.className="msg";},3500); }
+
+/* -------- build tabs + panels -------- */
+function buildUI(){
+  $("adminTabs").innerHTML = RESOURCES.map((r,i)=>`<button data-tab="${r.id}" class="${i===0?"active":""}">${esc(r.label)}</button>`).join("");
+  $("panels").innerHTML = RESOURCES.map((r,i)=>panelHTML(r,i)).join("");
+  $("adminTabs").addEventListener("click", e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    $("adminTabs").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));
+    document.querySelectorAll("[data-panel]").forEach(p=>p.classList.toggle("active",p.getAttribute("data-panel")===b.dataset.tab));
+  });
+  RESOURCES.forEach(r=>{ if(r.kind==="manage") wireForm(r); wireList(r); load(r); });
+}
+
+function fieldHTML(r,f){
+  const id=r.id+"_"+f.name; const cls=f.full?"full":"";
+  let inner="";
+  if(f.type==="textarea") inner=`<textarea id="${id}" ${f.max?`maxlength="${f.max}"`:""}></textarea>`;
+  else if(f.type==="select") inner=`<select id="${id}">${f.options.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("")}</select>`;
+  else if(f.type==="checkbox") return `<div class="${cls}"><label class="ck"><input type="checkbox" id="${id}" /> ${esc(f.label)}</label></div>`;
+  else if(f.type==="number") inner=`<input id="${id}" type="number" value="${f.def!=null?f.def:0}" />`;
+  else inner=`<input id="${id}" type="text" ${f.max?`maxlength="${f.max}"`:""} ${f.placeholder?`placeholder="${esc(f.placeholder)}"`:""} ${f.required?"required":""} />`;
+  return `<div class="${cls}"><label for="${id}">${esc(f.label)}${f.required?" *":""}</label>${inner}</div>`;
+}
+
+function panelHTML(r,i){
+  let form="";
+  if(r.kind==="manage"){
+    form=`<div class="card">
+      <h3 id="${r.id}_ftitle">Add — ${esc(r.label)}</h3>
+      <form id="${r.id}_form" style="margin-top:14px">
+        <input type="hidden" id="${r.id}_id" />
+        <div class="form-grid">${r.fields.map(f=>fieldHTML(r,f)).join("")}</div>
+        <div style="margin-top:16px;display:flex;gap:10px">
+          <button class="btn btn-gold" type="submit" id="${r.id}_save">Save</button>
+          <button class="btn btn-ghost" type="button" id="${r.id}_cancel" style="display:none">Cancel edit</button>
+        </div>
+      </form></div>`;
+  } else {
+    form=`<div class="card"><h3>${esc(r.label)}</h3>
+      <p class="rec-meta" style="margin-top:6px">Submissions from the public. Personal details are visible only to signed-in staff. Use the buttons to record screening decisions.</p></div>`;
+  }
+  return `<div data-panel="${r.id}" class="${i===0?"active":""}">
+    ${form}
+    <div class="card" style="margin-top:22px">
+      <h3>${r.kind==="records"?"Received":"Current"} (<span id="${r.id}_count">0</span>)</h3>
+      <div id="${r.id}_list" style="margin-top:8px"></div>
+    </div></div>`;
+}
+
+/* -------- data load + render -------- */
+async function load(r){
+  try{
+    const res=await fetch(r.endpoint);
+    if(!res.ok){ if(r.kind==="records"){ $(r.id+"_list").innerHTML='<p class="rec-meta" style="padding:12px 0">Sign-in required to view these records.</p>'; } return; }
+    const d=await res.json();
+    DATA[r.id]=(d[r.key]||[]).slice();
+    render(r);
+  }catch(e){}
+}
+
+function render(r){
+  const rows=DATA[r.id]||[]; $(r.id+"_count").textContent=rows.length;
+  $(r.id+"_list").innerHTML = rows.map(row=>rowHTML(r,row)).join("") ||
+    `<p class="rec-meta" style="padding:12px 0">${r.kind==="records"?"Nothing yet.":"Nothing yet — add one above."}</p>`;
+}
+
+function rowHTML(r,row){
+  let left="";
+  if(r.img && r.img(row)) left=`<img class="thumb" src="${esc(r.img(row))}" alt="" onerror="this.style.visibility='hidden'">`;
+  else if(r.ytimg && r.ytimg(row)) left=`<img class="thumb" src="https://i.ytimg.com/vi/${esc(r.ytimg(row))}/mqdefault.jpg" alt="" onerror="this.style.visibility='hidden'">`;
+  else if(r.chip){ const c=r.chip(row); left=`<div class="chip"><b>${esc(c.b)}</b><span>${esc(c.s)}</span></div>`; }
+  else left=`<div></div>`;
+  const status = r.statusField ? `<span class="badge ${esc(row[r.statusField]||"pending")}">${esc(row[r.statusField]||"pending")}</span>` : "";
+  const detail = r.detail ? `<div class="rec-meta" style="margin-top:4px">${r.detail(row)}</div>` : "";
+  let actions="";
+  if(r.kind==="manage"){
+    actions=`<button class="btn-sm" data-edit="${esc(row.id)}">Edit</button><button class="btn-sm btn-danger" data-del="${esc(row.id)}">Delete</button>`;
+  } else {
+    if(r.statuses){ actions=r.statuses.map(s=>`<button class="btn-sm" data-status="${esc(s)}" data-id="${esc(row.id)}">${esc(s)}</button>`).join("")+`<button class="btn-sm" data-note="${esc(row.id)}">Note</button>`; }
+    actions+=`<button class="btn-sm btn-danger" data-del="${esc(row.id)}">Delete</button>`;
+  }
+  return `<div class="ev-row">${left}
+    <div><strong>${esc(r.title(row))}</strong> ${status}
+      <div class="rec-meta">${esc(r.sub?r.sub(row):"")}</div>${detail}
+      ${row.notes?`<div class="rec-meta" style="margin-top:4px"><b>Staff note:</b> ${esc(row.notes)}</div>`:""}</div>
+    <div class="ev-actions">${actions}</div></div>`;
+}
+
+/* -------- manage: form submit + edit -------- */
+function readForm(r){
+  const o={ id: $(r.id+"_id").value || undefined };
+  r.fields.forEach(f=>{
+    const el=$(r.id+"_"+f.name);
+    if(f.type==="checkbox") o[f.name]=el.checked;
+    else if(f.type==="number") o[f.name]=parseInt(el.value,10)|| (f.def!=null?f.def:0);
+    else o[f.name]=el.value.trim();
+  });
+  return o;
+}
+function resetForm(r){
+  $(r.id+"_form").reset(); $(r.id+"_id").value="";
+  r.fields.forEach(f=>{ const el=$(r.id+"_"+f.name); if(f.type==="number") el.value=(f.def!=null?f.def:0); });
+  $(r.id+"_ftitle").textContent="Add — "+r.label; $(r.id+"_save").textContent="Save"; $(r.id+"_cancel").style.display="none";
+}
+function editRow(r,id){
+  const row=(DATA[r.id]||[]).find(x=>x.id===id); if(!row) return;
+  $(r.id+"_id").value=row.id;
+  r.fields.forEach(f=>{ const el=$(r.id+"_"+f.name);
+    if(f.type==="checkbox") el.checked=!!row[f.name];
+    else el.value=row[f.name]!=null?row[f.name]:(f.def!=null?f.def:"");
+  });
+  $(r.id+"_ftitle").textContent="Edit — "+r.label; $(r.id+"_save").textContent="Update"; $(r.id+"_cancel").style.display="inline-block";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function wireForm(r){
+  $(r.id+"_cancel").addEventListener("click",()=>resetForm(r));
+  $(r.id+"_form").addEventListener("submit", async e=>{
+    e.preventDefault(); const payload=readForm(r);
+    for(const f of r.fields){ if(f.required && !String(payload[f.name]||"").trim()){ showMsg(f.label+" is required.",false); return; } }
+    $(r.id+"_save").disabled=true;
+    const res=await fetch(r.endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    $(r.id+"_save").disabled=false;
+    if(res.ok){ showMsg("Saved.",true); resetForm(r); load(r); }
+    else{ const d=await res.json().catch(()=>({})); showMsg(d.error||"Save failed.",false); }
+  });
+}
+
+/* -------- shared list actions -------- */
+async function del(r,id){
+  if(!confirm("Delete this item?")) return;
+  const res=await fetch(r.endpoint+"/"+encodeURIComponent(id),{method:"DELETE"});
+  if(res.ok){ showMsg("Deleted.",true); load(r); } else { const d=await res.json().catch(()=>({})); showMsg(d.error||"Delete failed.",false); }
+}
+async function setStatus(r,id,status,extraNote){
+  const row=(DATA[r.id]||[]).find(x=>x.id===id); if(!row) return;
+  const payload=Object.assign({},row,{status:status}); if(extraNote!=null) payload.notes=extraNote;
+  const res=await fetch(r.endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  if(res.ok){ showMsg("Updated.",true); load(r); } else { const d=await res.json().catch(()=>({})); showMsg(d.error||"Update failed.",false); }
+}
+function wireList(r){
+  $(r.id+"_list").addEventListener("click", e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    if(b.dataset.edit) editRow(r,b.dataset.edit);
+    else if(b.dataset.del) del(r,b.dataset.del);
+    else if(b.dataset.status) setStatus(r,b.dataset.id,b.dataset.status);
+    else if(b.dataset.note){ const row=(DATA[r.id]||[]).find(x=>x.id===b.dataset.note); const note=prompt("Screening / staff note:",row&&row.notes||""); if(note!==null) setStatus(r,b.dataset.note,(row&&row.status)||"screening",note); }
+  });
+}
+
+/* ---------------- Auth gate ---------------- */
+(async ()=>{
+  let roles=[], name="";
+  try{ const r=await fetch("/.auth/me"); const d=await r.json(); if(d.clientPrincipal){ roles=d.clientPrincipal.userRoles||[]; name=d.clientPrincipal.userDetails||""; } }catch(e){}
+  if(roles.includes("admin")){
+    $("gate").style.display="none"; $("console").style.display="block";
+    $("who").textContent=name?("Signed in as "+name):""; buildUI();
+  } else if(name){
+    $("gateMsg").textContent="You're signed in as "+name+", but this account doesn't have the admin role yet. Ask the site administrator to grant access.";
+    $("gateActions").style.display="block";
+  } else {
+    $("gateMsg").textContent="Please sign in with your Historical Society email to manage the site.";
+    $("gateActions").style.display="block";
+  }
+})();
+</script>
+</body>
+</html>
+

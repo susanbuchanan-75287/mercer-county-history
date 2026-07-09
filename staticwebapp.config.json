@@ -1,0 +1,36 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/api/*", "/icons/*", "/audio/*", "/video/*", "/img/*", "/css/*", "/js/*", "*.png", "*.svg", "*.json", "*.js", "*.css"]
+  },
+  "routes": [
+    { "route": "/admin", "rewrite": "/admin.html" },
+    { "route": "/api/events", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/events/*", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/media", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/media/*", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/photos", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/photos/*", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/videos", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/videos/*", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/buttons", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/buttons/*", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/shifts", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/shifts/*", "methods": ["POST", "PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/volunteers", "methods": ["PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/volunteers/*", "methods": ["PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/signups", "methods": ["PUT", "DELETE"], "allowedRoles": ["admin"] },
+    { "route": "/api/signups/*", "methods": ["PUT", "DELETE"], "allowedRoles": ["admin"] }
+  ],
+  "mimeTypes": {
+    ".json": "application/json",
+    ".webmanifest": "application/manifest+json",
+    ".svg": "image/svg+xml",
+    ".mp3": "audio/mpeg",
+    ".m4a": "audio/mp4",
+    ".mp4": "video/mp4"
+  },
+  "globalHeaders": {
+    "Cache-Control": "no-cache"
+  }
+}
