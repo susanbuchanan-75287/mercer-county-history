@@ -1,5 +1,5 @@
 /* Mercer County Historical Society — service worker (offline-friendly, cache-first for the app shell) */
-const CACHE = "mchs-v2";
+const CACHE = "mchs-v3";
 const SHELL = [
   ".", "index.html", "museums.html", "research.html", "programs.html", "support.html", "contact.html", "volunteer.html",
   "css/styles.css", "js/site.js",
